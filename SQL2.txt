@@ -1,0 +1,151 @@
+
+select avg(salary) avgsal, max(salary) maxsal, min(salary) minsal ,sum(salary),department_id from employees where department_id=90;
+select avg(salary) avgsal, max(salary) maxsal, min(salary) minsal ,sum(salary),department_id from employees where department_id=50;
+
+select min(hire_date),max(hire_date) from employees where department_id=50;
+
+select count(*)  from employees where department_id=50;
+
+select count(*) from employees;
+select employee_id, commission_pct from employees;
+
+select count(commission_pct) from employees;
+select count(commission_pct>0) from employees;
+
+select employee_id, department_id from employees;
+select distinct department_id from employees;
+
+select count(distinct department_id) from employees;
+
+
+
+select avg(commission_pct) from employees;
+select (sum(commission_pct)/count(*) ) average from employees;
+select (sum(commission_pct)/count(commission_pct) ) average from employees;
+------------------------------------------------------------------
+
+creating  groups of data within a table
+
+1. to find total salary paid  department wise 
+
+group by is clause is used 
+
+to find the department managerid   , department id, total no.of employees 
+                                                                          manager wise
+
+find the departments whose is paid with avg salary  for the departmennt> 5000 
+
+
+
+we cannot use where clause to restrict group functions ie we cannot use
+group functions with where clause
+
+we can use HAVING clause to restrict gruop functions.
+
+
+
+find the total salary paid for all the employees except for the 'REP'
+
+
+
+select department_id,sum(salary) from employees group by department_id;
+
+select avg(salary) avgsal, max(salary) maxsal, min(salary) minsal ,sum(salary),department_id from employees group by department_id;
+
+select avg(salary) avgsal, max(salary) maxsal, min(salary) minsal ,sum(salary),department_id from employees where (department_id>40) group by department_id;
+
+select sum(salary),department_id from employees 
+     group by department_id 
+     order by department_id desc;
+select  count(last_name) from  employees where department_id=90;  
+select department_id , count(last_name) from  employees group by department_id; 
+select department_id ,manager_id, count(last_name) from  employees group by manager_id;  
+      
+     
+select sum(salary) ,avg(salary),department_id from employees
+group by department_id 
+   having avg(salary) > 8000 ;
+   
+   select sum(salary) ,avg(salary),department_id from employees
+   group by department_id
+   having avg(salary) > 8000 ;
+   
+   
+   select department_id, max(salary) from employees
+   group by department_id
+   having max(salary) >10000;
+   
+   
+   select job_id, sum(salary)  totalsal from employees;
+   
+   
+   select salary from 
+       where job_id NOT like '%REP%'
+       group by job_id;
+       
+        select job_id, sum(salary)  totalsal from employees
+       where job_id NOT like '%REP%'
+       group by job_id
+       having sum(salary) >=12000;
+       
+        select job_id, sum(salary)  totalsal from employees
+       where job_id NOT like '%REP%'
+       group by job_id
+       having sum(salary) >=12000
+       order by sum(salary) desc;
+       
+       select avg(salary) from employees 
+          group by department_id;
+          
+select max(avg(salary)) from employees 
+     group by department_id;-------giving me error XXX
+  solved in subqueries 
+
+------------------------------------------------------------------------
+
+find all the employees whose salary is greater than "Ernst"
+
+select employee_id,last_name,salary from employees
+   where salary >(select salary from employees where last_name='Ernst');
+
+
+
+select employee_id,last_name,salary from employees
+   where salary >(select salary from employees where last_name='Ernst');
+   
+select avg(salary) sal from employees group by department_id 
+ order by avg(salary) desc;  
+   
+select max(sal) from (select avg(salary) sal from employees group by department_id) as result;
+
+
+
+details of employees ---> only employees who have same jobid as 'Ernst'
+                              and their salary should be > salary of 'Austin'
+
+
+select employee_id, last_name, salary,job_id from employees
+      where (job_id = (select job_id from employees where last_name='Ernst') 
+          and  salary >(select salary from employees where last_name='Austin'));
+
+
+find the employees who are paid the least.
+
+select employee_id,last_name ,job_id,salary from employees
+    where salary = (select  min(salary) from employees);
+
+
+
+to find the departments whose min salary is greater than the min salary of deptid= 70
+select department_id , MIN(salary) from employees
+   group by department_id
+   having MIN(salary) > (select min(salary) from employees where department_id=70);
+
+
+show columns from employees;
+select employee_id,last_name,location_id,employees.department_id from employees 
+INNER JOIN departments  ON departments.department_id = employees.department_id;
+
+select employee_id,job_id from employees 
+union
+select employee_id,job_id from job_history;
