@@ -1,0 +1,139 @@
+C:\Users\csnag>cd/
+
+C:\>cd C:\Program Files\MongoDB\Server\5.0\bin
+
+C:\Program Files\MongoDB\Server\5.0\bin>mongo
+> show dbs;
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+> use customerdb;
+switched to db customerdb
+> db
+customerdb
+> db.createUser(
+... {
+... user:"aditya",
+... pwd:"1234",
+... roles:["readWrite",
+... "dbAdmin"]
+... }
+... );
+Successfully added user: { "user" : "aditya", "roles" : [ "readWrite", "dbAdmin" ] }
+> db.createCollection("customer");
+{ "ok" : 1 }
+> show collections
+customer
+> db.customer.insert({first_name:"aditya",last_name:"n koundinya"});
+WriteResult({ "nInserted" : 1 })
+> db.customer.insert({first_name:"adi",last_name:"n k"});
+WriteResult({ "nInserted" : 1 })
+
+> db.customer.find();
+{ "_id" : ObjectId("6142e3d0c64b1b5fbc059fc0"), "first_name" : "aditya", "last_name" : "n koundinya" }
+{ "_id" : ObjectId("6142e3e9c64b1b5fbc059fc1"), "first_name" : "adi", "last_name" : "n k" }
+
+> db.customer.find().pretty();
+{
+        "_id" : ObjectId("6142e3d0c64b1b5fbc059fc0"),
+        "first_name" : "aditya",
+        "last_name" : "n koundinya"
+}
+{
+        "_id" : ObjectId("6142e3e9c64b1b5fbc059fc1"),
+        "first_name" : "adi",
+        "last_name" : "n k"
+}
+
+> db.customer.insert([{first_name:"dilip",last_name:"Rao"},{first_name:"Sourav",ldb.customer.insert([{first_name:"dilip",last_name:"Rao"},{first_name:"Sourav",last_name:"Ganguly"}]);
+BulkWriteResult({
+        "writeErrors" : [ ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 2,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+
+> db.customer.find().pretty();
+{
+        "_id" : ObjectId("6142e3d0c64b1b5fbc059fc0"),
+        "first_name" : "aditya",
+        "last_name" : "n koundinya"
+}
+{
+        "_id" : ObjectId("6142e3e9c64b1b5fbc059fc1"),
+        "first_name" : "adi",
+        "last_name" : "n k"
+}
+{
+        "_id" : ObjectId("6142e659c64b1b5fbc059fc2"),
+        "first_name" : "dilip",
+        "last_name" : "Rao"
+}
+{
+        "_id" : ObjectId("6142e659c64b1b5fbc059fc3"),
+        "first_name" : "Sourav",
+        "last_name" : "Ganguly"
+}
+
+db.customer.insert([{first_name:"dilip",last_name:"Rao"},{first_name:"Sourav",last_name:"Ganguly"}]);
+
+----------------------------------------------------------------------
+
+In NOSQL db we can easily scale up the database
+db.customer.insert([{first_name:"Usama",last_name:"Shukri",gender:"Male"},{first_name:"Dhoni",last_name:"MS",gender:"Male"}]);
+BulkWriteResult({
+        "writeErrors" : [ ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 2,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+})
+> db.customer.find();
+{ "_id" : ObjectId("6142e357a024d997cc299f63"), "first_name" : "myth", "last_name" : "subu" }
+{ "_id" : ObjectId("6142e3dea024d997cc299f64"), "first_name" : "jayashree", "last_name" : "G" }
+{ "_id" : ObjectId("6142e61ca024d997cc299f65"), "first_name" : "dilip", "last_name" : "Rao" }
+{ "_id" : ObjectId("6142e61ca024d997cc299f66"), "first_name" : "Sourav", "last_name" : "Ganguly" }
+{ "_id" : ObjectId("6142e909a024d997cc299f67"), "first_name" : "Usama", "last_name" : "Shukri", "gender" : "Male" }
+{ "_id" : ObjectId("6142e909a024d997cc299f68"), "first_name" : "Dhoni", "last_name" : "MS", "gender" : "Male" }
+
+
+--------------------------------------------------------------------------------------------
+To update a record   : use the update function
+
+db.customer.update({first_name:"myth"},{first_name:"myth",last_name:"subu",gender:"female"});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+db.customer.update({first_name:"jayashree"},{$set:{gender:"female"}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+
+db.customer.update({first_name:"dilip"},{$set:{gender:"male",age:45}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+db.customer.update({first_name:"dilip"},{$inc:{age:5}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+-------------------------------------------------------------------------
+to delete a field :  using update function
+
+
+db.customer.update({first_name:"dilip"},{$unset:{age:1}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+----------------------------------------------------------------------
+how to insert a record using update function
+
+db.customer.update({first_name:"shiva"},{first_name:"shiv",last_name:"Reddy",gender:"male"},{upsert:true});
+
+{ "_id" : ObjectId("6142f292bb870e0b4320eb12"), "first_name" : "shiv", "last_name" : "Reddy", "gender" : "male" }
+
+-----------------------------------------------------------------------------------
+rename a field  in a record
+
+db.customer.update({first_name:"myth"},{$rename:{"gender":"sex"}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
